@@ -7,4 +7,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RegularText">
+        <item name="android:textColor">@color/textPrimaryColor</item>
+    </style>
+
+    <style name="RegularText.Caption">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="RegularText.Text">
+        <item name="android:textSize">15sp</item>
+    </style>
+
 </resources>
