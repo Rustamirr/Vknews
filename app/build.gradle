@@ -1,0 +1,128 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.example.vknews"
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+ext {
+    ktxVersion = '1.3.0'
+    ktxFragmentVersion = '1.2.5'
+    multidexVersion = '2.0.1'
+
+    appcompatVersion = '1.1.0'
+    constraintLayoutVersion = '2.0.0-beta8'
+    recyclerViewVersion = '1.2.0-alpha04'
+    materialVersion = '1.1.0'
+
+    jUnitVersion = '4.12'
+    androidJUnitVersion = '1.1.1'
+    espressoCoreVersion = '3.2.0'
+
+    moxyVersion = '2.1.1'
+    daggerVersion = '2.27'
+    glideVersion = '4.11.0'
+    ciceroneVersion = '5.1.0'
+    retrofitVersion = '2.4.0'
+    okhttpVersion = '3.12.10'
+
+    rxAndroidVersion = '2.1.1'
+    rxKotlinVersion = '2.4.0'
+    timberVersion = '4.7.1'
+    pagingVersion = '2.1.2'
+    vkSdkVersion = '2.1.1'
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
+    implementation "androidx.multidex:multidex:$multidexVersion"
+
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+
+    // Test
+    testImplementation "junit:junit:$jUnitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidJUnitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCoreVersion"
+
+    // Moxy
+    implementation "com.github.moxy-community:moxy:$moxyVersion"
+    implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
+    implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
+    kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
+
+    // Dagger
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Cicerone
+    implementation "ru.terrakok.cicerone:cicerone:$ciceroneVersion"
+
+    // RxJava
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    // OkHttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+
+    // Timber
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+    implementation "androidx.paging:paging-rxjava2-ktx:$pagingVersion"
+
+    // VK
+    implementation "com.vk:androidsdk:$vkSdkVersion"
+}
