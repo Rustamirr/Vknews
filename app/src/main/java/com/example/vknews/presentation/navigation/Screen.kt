@@ -1,14 +1,20 @@
 package com.example.vknews.presentation.navigation
 
+import androidx.fragment.app.DialogFragment
+import com.example.vknews.presentation.news.NewsFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 sealed class Screen : SupportAppScreen() {
 
     object News : Screen() {
-        override fun getFragment() = TODO()//News.newInstance()
+        override fun getFragment() = NewsFragment.newInstance()
     }
 
-    data class NewsDetail(private val newsId: Int) : Screen() {
-        override fun getFragment() = TODO()//NewsDetail.newInstance(newsId)
+    sealed class Dialog : SupportAppScreen() {
+        abstract override fun getFragment(): DialogFragment
+
+        /*data class DatePicker(private val date: LocalDateTime): Dialog() {
+            override fun getFragment() = DatePickerDialogFragment()
+        }*/
     }
 }
