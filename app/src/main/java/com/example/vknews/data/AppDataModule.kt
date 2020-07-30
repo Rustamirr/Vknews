@@ -1,5 +1,6 @@
 package com.example.vknews.data
 
+import com.example.vknews.data.authorization.AuthorizationDataModule
 import com.example.vknews.data.news.NewsDataModule
 import dagger.Module
 import dagger.Provides
@@ -12,18 +13,23 @@ import javax.inject.Singleton
 
 private const val BASE_URL = "https://api.vk.com/"
 
-@Module(includes = [NewsDataModule::class])
+@Module(
+    includes = [
+        NewsDataModule::class,
+        AuthorizationDataModule::class
+    ]
+)
 interface AppDataModule {
 
     companion object {
         @Singleton
         @Provides
         fun provideRetrofit(client: OkHttpClient): Retrofit = Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .baseUrl(BASE_URL)
-                .build()
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .baseUrl(BASE_URL)
+            .build()
 
         @Singleton
         @Provides
@@ -32,8 +38,8 @@ interface AppDataModule {
                 level = HttpLoggingInterceptor.Level.BODY
             }
             return OkHttpClient.Builder()
-                    .addInterceptor(logging)
-                    .build()
+                .addInterceptor(logging)
+                .build()
         }
     }
 }

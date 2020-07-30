@@ -4,4 +4,5 @@
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
     <string name="choose_date">Choose date</string>
+    <integer name="com_vk_sdk_AppId">7553792</integer>
 </resources>
