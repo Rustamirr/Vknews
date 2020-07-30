@@ -1,5 +1,6 @@
 package com.example.vknews.data
 
+import com.example.vknews.data.news.NewsDataModule
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -11,7 +12,7 @@ import javax.inject.Singleton
 
 private const val BASE_URL = "https://api.vk.com/"
 
-@Module
+@Module(includes = [NewsDataModule::class])
 interface AppDataModule {
 
     companion object {

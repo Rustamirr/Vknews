@@ -7,8 +7,8 @@ import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import moxy.MvpAppCompatActivity
+import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -21,11 +21,12 @@ class MainActivity : MvpAppCompatActivity(), HasAndroidInjector, MainActivityVie
     lateinit var navigatorHolder: NavigatorHolder
 
     @Inject
+    lateinit var navigator: Navigator
+
+    @Inject
     lateinit var presenterProvider: Provider<MainActivityPresenter>
 
     private val presenter: MainActivityPresenter by baseMoxyPresenter(::presenterProvider::class.java.name) { presenterProvider.get() }
-
-    private val navigator = SupportAppNavigator(this, R.id.container)
 
     override fun androidInjector() = dispatchingAndroidInjector
 

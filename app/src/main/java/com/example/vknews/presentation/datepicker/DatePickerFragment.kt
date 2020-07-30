@@ -5,26 +5,29 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import com.example.vknews.R
+import androidx.fragment.app.viewModels
 import com.example.vknews.databinding.FragmentDatepickerBinding
 import com.example.vknews.presentation.core.baseMoxyPresenter
+import com.example.vknews.presentation.news.DateType
+import com.example.vknews.presentation.news.NewsViewModel
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import moxy.MvpAppCompatDialogFragment
-import java.time.LocalDateTime
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Provider
 
 private const val ARGUMENT_DATE = "ARGUMENT_DATE"
+private const val ARGUMENT_DATE_TYPE = "ARGUMENT_DATE_TYPE"
 
 class DatePickerFragment : MvpAppCompatDialogFragment(), DatePickerView, HasAndroidInjector {
 
     companion object {
-        fun newInstance(date: LocalDateTime) = DatePickerFragment()
+        fun newInstance(date: LocalDate, dateType: DateType) = DatePickerFragment()
             .apply {
-                arguments = bundleOf(ARGUMENT_DATE to date)
+                arguments = bundleOf(ARGUMENT_DATE to date, ARGUMENT_DATE_TYPE to dateType)
             }
     }
 
@@ -38,7 +41,10 @@ class DatePickerFragment : MvpAppCompatDialogFragment(), DatePickerView, HasAndr
 
     private val binding by lazy { FragmentDatepickerBinding.inflate(requireParentFragment().layoutInflater) }
 
-    private val date by lazy { arguments?.get(ARGUMENT_DATE) as LocalDateTime }
+    private val date by lazy { arguments?.get(ARGUMENT_DATE) as LocalDate }
+    private val dateType by lazy { arguments?.get(ARGUMENT_DATE_TYPE) as DateType }
+
+    private val newsViewModel: NewsViewModel by viewModels({ requireParentFragment() })
 
     override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
 
@@ -49,9 +55,24 @@ class DatePickerFragment : MvpAppCompatDialogFragment(), DatePickerView, HasAndr
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
-            .setTitle(R.string.choose_date)
             .setView(binding.root)
-            .setPositiveButton(android.R.string.ok, null)
+            .apply { initDatePicker() }
+            .setPositiveButton(android.R.string.ok) { _, _ -> onPositiveButtonClick() }
             .create()
+    }
+
+    private fun initDatePicker() {
+        binding.datePicker.init(
+            date.year, date.monthValue - 1, date.dayOfMonth, null
+        )
+    }
+
+    private fun onPositiveButtonClick() {
+        with(binding) {
+            newsViewModel.onChooseDate(
+                LocalDate.of(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth),
+                dateType
+            )
+        }
     }
 }

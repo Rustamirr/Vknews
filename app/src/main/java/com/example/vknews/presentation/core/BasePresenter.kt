@@ -9,10 +9,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import moxy.MvpPresenter
-import ru.terrakok.cicerone.Router
 
 abstract class BasePresenter<S, V : BaseView, I : Interactor<S>>(
-        protected val router: Router,
         protected val interactor: I,
         protected val schedulers: Schedulers,
         protected val logger: Logger

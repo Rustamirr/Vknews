@@ -1,25 +1,21 @@
 package com.example.vknews.presentation.core
 
-import android.content.Context
-import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
 import moxy.MvpDelegateHolder
 import moxy.MvpPresenter
 import moxy.ktx.MoxyKtxDelegate
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-private const val KEYBOARD_BEHAVIOR_FLAG = 0
+private const val DATE_FORMAT = "dd.MM.yy"
 
 fun <T : MvpPresenter<*>> MvpDelegateHolder.baseMoxyPresenter(
-        name: String,
-        factory: () -> T
+    name: String,
+    factory: () -> T
 ): MoxyKtxDelegate<T> {
     return MoxyKtxDelegate(mvpDelegate, name, factory)
 }
 
-fun Fragment.hideKeyboard() {
-    view?.let {
-        with(requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager) {
-            hideSoftInputFromWindow(it.windowToken, KEYBOARD_BEHAVIOR_FLAG)
-        }
-    }
-}
+fun String.toLocalDate(): LocalDate =
+    LocalDate.parse(this, DateTimeFormatter.ofPattern(DATE_FORMAT))
+
+fun LocalDate.toStringFormat(): String = this.format(DateTimeFormatter.ofPattern(DATE_FORMAT))

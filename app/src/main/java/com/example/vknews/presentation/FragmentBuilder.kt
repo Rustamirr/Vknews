@@ -1,28 +1,26 @@
 package com.example.vknews.presentation
 
+import com.example.vknews.presentation.datepicker.DatePickerFragment
+import com.example.vknews.presentation.datepicker.DatePickerFragmentModule
+import com.example.vknews.presentation.news.NewsFragment
+import com.example.vknews.presentation.news.NewsFragmentModule
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 @Module
 interface FragmentBuilder {
 
-    /*@ContributesAndroidInjector(
+    @ContributesAndroidInjector(
         modules = [
-            GalleryFragmentModule::class
+            NewsFragmentModule::class
         ]
     )
-    fun galleryFragmentInjector(): GalleryFragment
+    fun newsFragmentInjector(): NewsFragment
 
     @ContributesAndroidInjector(
         modules = [
-            GalleryDetailFragmentModule::class
+            DatePickerFragmentModule::class
         ]
     )
-    fun galleryDetailFragmentInjector(): GalleryDetailFragment
-
-    @ContributesAndroidInjector(
-        modules = [
-            GalleryMapFragmentModule::class
-        ]
-    )
-    fun galleryMapFragmentInjector(): GalleryMapFragment*/
+    fun datePickerFragmentInjector(): DatePickerFragment
 }
