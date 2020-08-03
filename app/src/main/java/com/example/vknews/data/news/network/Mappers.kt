@@ -28,25 +28,27 @@ private fun PostResponse.toNewsInfo(groupName: String): NewsInfo {
     val attachmentResponse = requireNotNull(attachmentResponses)
         .first { it.type == ATTACHMENT_TYPE_PHOTO || it.type == ATTACHMENT_TYPE_LINK }
 
+    val date = LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault())
+
     return when (attachmentResponse.type) {
         ATTACHMENT_TYPE_LINK -> {
             val linkResponse = requireNotNull(attachmentResponse.linkResponse)
             NewsInfo(
-                id = id,
-                title = linkResponse.title,
-                date = LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()),
-                description = linkResponse.url + "\n" + linkResponse.description + "\n" + text,
-                imageUrl = linkResponse.photo.sizeResponses.last().imageUrl
+                id,
+                linkResponse.title,
+                linkResponse.url + "\n" + linkResponse.description + "\n" + text,
+                date,
+                linkResponse.photo.sizeResponses?.lastOrNull()?.imageUrl
             )
         }
         else -> {
             val photoResponse = requireNotNull(attachmentResponse.photoResponse)
             NewsInfo(
-                id = id,
-                title = groupName,
-                date = LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()),
-                description = text,
-                imageUrl = photoResponse.sizeResponses.last().imageUrl
+                id,
+                groupName,
+                text,
+                date,
+                photoResponse.sizeResponses?.lastOrNull()?.imageUrl
             )
         }
     }

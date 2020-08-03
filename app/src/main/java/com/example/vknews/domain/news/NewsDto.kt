@@ -10,7 +10,7 @@ data class NewsFeed(
 data class NewsInfo(
     val id: Long,
     val title: String,
-    val date: LocalDateTime,
     val description: String,
+    val date: LocalDateTime,
     val imageUrl: String?
 )

@@ -71,7 +71,7 @@ data class LinkResponse(
 data class PhotoResponse(
     @Expose
     @SerializedName("sizes")
-    val sizeResponses: List<SizeResponse>
+    val sizeResponses: List<SizeResponse>?
 )
 
 data class SizeResponse(
