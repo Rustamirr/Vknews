@@ -25,15 +25,31 @@ class MainActivityPresenter
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        router.newRootScreen(Screen.News)
+        compositeDisposable.add(
+            interactor.isAuth()
+                .subscribeOn(schedulers.io())
+                .observeOn(schedulers.main())
+                .subscribeBy(
+                    onSuccess = { isAuth ->
+                        when (isAuth) {
+                            true -> showStartScreen()
+                            else -> viewState.onTokenRequired()
+                        }
+                    },
+                    onError = logger::logError
+                )
+        )
     }
 
     fun onLogin(token: Token) {
         compositeDisposable.add(
-            interactor.loginPassed(token)
+            interactor.authorizationPassed(token)
                 .subscribeOn(schedulers.io())
                 .observeOn(schedulers.main())
-                .subscribeBy(onError = logger::logError)
+                .subscribeBy(
+                    onComplete = { showStartScreen() },
+                    onError = logger::logError
+                )
         )
     }
 
@@ -44,5 +60,9 @@ class MainActivityPresenter
     override fun onDestroy() {
         compositeDisposable.dispose()
         super.onDestroy()
+    }
+
+    private fun showStartScreen() {
+        router.newRootScreen(Screen.News)
     }
 }

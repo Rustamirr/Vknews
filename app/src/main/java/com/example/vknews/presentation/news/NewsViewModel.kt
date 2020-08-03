@@ -1,24 +1,17 @@
 package com.example.vknews.presentation.news
 
-import android.os.Bundle
-import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.vknews.presentation.core.SingleLiveEvent
-import java.time.LocalDate
-
-const val DATE_PICKER_DATE = "DATE"
-const val DATE_PICKER_DATE_TYPE = "DATE_TYPE"
+import com.example.vknews.presentation.datepicker.DatePickerDate
 
 class NewsViewModel : ViewModel() {
 
-    private val datePickerLiveData = SingleLiveEvent<Bundle>()
+    private val datePickerLiveData = SingleLiveEvent<DatePickerDate>()
 
-    fun observeDatePicker(): LiveData<Bundle> = datePickerLiveData
+    fun observeDatePicker(): LiveData<DatePickerDate> = datePickerLiveData
 
-    fun onChooseDate(date: LocalDate, dateType: DateType) {
-        datePickerLiveData.setValue(
-            bundleOf(DATE_PICKER_DATE to date, DATE_PICKER_DATE_TYPE to dateType)
-        )
+    fun onDateChosen(datePickerDate: DatePickerDate) {
+        datePickerLiveData.setValue(datePickerDate)
     }
 }

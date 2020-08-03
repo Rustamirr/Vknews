@@ -4,6 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.vknews.databinding.FragmentNewsItemBinding
+import com.example.vknews.presentation.core.toStringFormat
 
 class NewsViewHolderCreator(
     private val glideManager: RequestManager,
@@ -23,14 +24,16 @@ class NewsViewHolder(
 
     fun bind(item: NewsItem?) {
         with(binding) {
-            /*glideManager.load(item?.url)
+            title.text = item?.title ?: ""
+            date.text = item?.date?.toStringFormat() ?: ""
+            glideManager.load(item?.imageUrl)
                 .placeholder(android.R.drawable.ic_menu_help)
                 .centerCrop()
-                .into(ateaphoto)
+                .into(image)
             when (item != null) {
                 true -> root.setOnClickListener { onNewsItemClick(item) }
                 else -> root.setOnClickListener(null)
-            }*/
+            }
         }
     }
 }

@@ -1,11 +1,19 @@
 package com.example.vknews.data.news
 
+import com.example.vknews.data.news.network.NewsNetworkApi
+import com.example.vknews.data.news.network.NewsNetworkSource
+import com.example.vknews.data.news.network.NewsNetworkSourceImpl
+import com.example.vknews.domain.NewsRepository
+import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 interface NewsDataModule {
 
-    /*companion object {
+    companion object {
         @Singleton
         @Provides
         fun provideNewsNetworkApi(retrofit: Retrofit): NewsNetworkApi =
@@ -18,5 +26,5 @@ interface NewsDataModule {
 
     @Singleton
     @Binds
-    fun bindNewsNetworkSource(newsNetworkSourceImpl: NewsNetworkSourceImpl): NewsNetworkSource*/
+    fun bindNewsNetworkSource(newsNetworkSourceImpl: NewsNetworkSourceImpl): NewsNetworkSource
 }

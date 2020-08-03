@@ -40,7 +40,6 @@ class MainActivity : MvpAppCompatActivity(), HasAndroidInjector, MainActivityVie
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        VK.login(this, arrayListOf(VKScope.WALL, VKScope.FRIENDS))
     }
 
     override fun onResumeFragments() {
@@ -51,6 +50,10 @@ class MainActivity : MvpAppCompatActivity(), HasAndroidInjector, MainActivityVie
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    override fun onTokenRequired() {
+        VK.login(this, arrayListOf(VKScope.WALL, VKScope.FRIENDS))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

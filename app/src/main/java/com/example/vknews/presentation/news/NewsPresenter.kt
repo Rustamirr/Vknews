@@ -1,20 +1,26 @@
 package com.example.vknews.presentation.news
 
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.paging.PageKeyedDataSource
+import androidx.paging.PagedList
 import com.example.vknews.domain.core.Logger
 import com.example.vknews.domain.core.Schedulers
+import com.example.vknews.domain.news.NewsInfo
 import com.example.vknews.domain.news.NewsInteractor
 import com.example.vknews.domain.news.NewsState
 import com.example.vknews.presentation.core.BasePresenter
+import com.example.vknews.presentation.datepicker.DatePickerDate
+import com.example.vknews.presentation.datepicker.DatePickerDateType.END_DATE
+import com.example.vknews.presentation.datepicker.DatePickerDateType.START_DATE
 import com.example.vknews.presentation.navigation.Screen
 import com.example.vknews.presentation.news.adapter.NewsItem
+import io.reactivex.rxkotlin.subscribeBy
 import moxy.InjectViewState
 import ru.terrakok.cicerone.Router
 import java.time.LocalDate
 import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @InjectViewState
@@ -31,6 +37,7 @@ class NewsPresenter
 ) {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+        initLoading()
         mapStateToRender(
             NewsState::startDate,
             viewState::renderStartDate
@@ -42,81 +49,73 @@ class NewsPresenter
     }
 
     fun onStartDateClick(startDate: LocalDate) {
-        router.navigateTo(Screen.Dialog.DatePicker(startDate, DateType.START_DATE))
+        router.navigateTo(
+            Screen.Dialog.DatePicker(DatePickerDate(startDate, START_DATE))
+        )
     }
 
     fun onEndDateClick(endDate: LocalDate) {
-        router.navigateTo(Screen.Dialog.DatePicker(endDate, DateType.END_DATE))
+        router.navigateTo(
+            Screen.Dialog.DatePicker(DatePickerDate(endDate, END_DATE))
+        )
     }
 
-    fun onDateChosen(bundle: Bundle) {
-        val dateType = bundle.get(DATE_PICKER_DATE_TYPE) as DateType
-        val date = bundle.get(DATE_PICKER_DATE) as LocalDate
-        when (dateType) {
-            DateType.START_DATE -> interactor.setStartDate(date)
-            DateType.END_DATE -> interactor.setEndDate(date)
+    fun onDateChosen(datePickerDate: DatePickerDate) {
+        when (datePickerDate.dateType) {
+            START_DATE -> interactor.setStartDate(datePickerDate.date)
+            END_DATE -> interactor.setEndDate(datePickerDate.date)
         }
+        initLoading()
     }
 
     fun onNewsItemClick(newsItem: NewsItem) {
         //router.navigateTo(Screen.NewsDetail(newsItem.id))
     }
 
-    fun onFindButtonClick() {
-        /*val pagedListConfig = PagedList.Config.Builder()
+    private fun initLoading() {
+        val pagedListConfig = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(PAGE_SIZE)
-            .setPageSize(PAGE_SIZE)
             .build()
         val pagedList = PagedList.Builder(PagedDataSource(), pagedListConfig)
             .setFetchExecutor(Executors.newSingleThreadExecutor())
             .setNotifyExecutor(MainThreadExecutor())
             .build()
-        viewState.renderList(pagedList)*/
+        viewState.renderList(pagedList)
     }
 
-    private fun loadPagePhotosInfo(
-        page: Int,
-        callbackAction: (list: List<NewsItem>) -> Unit
-    ) {
-        /*disposeOnDestroy(
+    private fun loadNews(callbackAction: (list: List<NewsItem>) -> Unit) {
+        disposeOnDestroy(
             interactor.loadNews()
-                .observeOn(schedulers.main())
                 .subscribeBy(
                     onSuccess = {
-                        callbackAction(it.map(NewsInfo::toNewsItem))
+                        callbackAction(it.newsInfo.map(NewsInfo::toNewsItem))
                     },
                     onError = {
                         logger.logError(it)
                         viewState.showErrorOccurred()
                     }
                 )
-        )*/
+        )
     }
 
-    inner class PagedDataSource : PageKeyedDataSource<Int, NewsItem>() {
+    inner class PagedDataSource : PageKeyedDataSource<String, NewsItem>() {
         override fun loadInitial(
-            params: LoadInitialParams<Int>,
-            callback: LoadInitialCallback<Int, NewsItem>
+            params: LoadInitialParams<String>,
+            callback: LoadInitialCallback<String, NewsItem>
         ) {
-            /*loadPagePhotosInfo(START_PAGE) { list: List<PhotoInfoItem> ->
-                callback.onResult(list, null, START_PAGE)
-            }*/
+            loadNews { callback.onResult(it, null, null) }
         }
 
         override fun loadAfter(
-            params: LoadParams<Int>,
-            callback: LoadCallback<Int, NewsItem>
+            params: LoadParams<String>,
+            callback: LoadCallback<String, NewsItem>
         ) {
-            val page = params.key + 1
-            loadPagePhotosInfo(page) { list: List<NewsItem> ->
-                callback.onResult(list, page)
-            }
+            loadNews { callback.onResult(it, null) }
         }
 
         override fun loadBefore(
-            params: LoadParams<Int>,
-            callback: LoadCallback<Int, NewsItem>
+            params: LoadParams<String>,
+            callback: LoadCallback<String, NewsItem>
         ) {
             // no op
         }

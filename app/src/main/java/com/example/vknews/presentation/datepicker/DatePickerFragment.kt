@@ -8,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.example.vknews.databinding.FragmentDatepickerBinding
 import com.example.vknews.presentation.core.baseMoxyPresenter
-import com.example.vknews.presentation.news.DateType
 import com.example.vknews.presentation.news.NewsViewModel
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -25,9 +24,12 @@ private const val ARGUMENT_DATE_TYPE = "ARGUMENT_DATE_TYPE"
 class DatePickerFragment : MvpAppCompatDialogFragment(), DatePickerView, HasAndroidInjector {
 
     companion object {
-        fun newInstance(date: LocalDate, dateType: DateType) = DatePickerFragment()
+        fun newInstance(datePickerDate: DatePickerDate) = DatePickerFragment()
             .apply {
-                arguments = bundleOf(ARGUMENT_DATE to date, ARGUMENT_DATE_TYPE to dateType)
+                arguments = bundleOf(
+                    ARGUMENT_DATE to datePickerDate.date,
+                    ARGUMENT_DATE_TYPE to datePickerDate.dateType
+                )
             }
     }
 
@@ -42,7 +44,7 @@ class DatePickerFragment : MvpAppCompatDialogFragment(), DatePickerView, HasAndr
     private val binding by lazy { FragmentDatepickerBinding.inflate(requireParentFragment().layoutInflater) }
 
     private val date by lazy { arguments?.get(ARGUMENT_DATE) as LocalDate }
-    private val dateType by lazy { arguments?.get(ARGUMENT_DATE_TYPE) as DateType }
+    private val dateType by lazy { arguments?.get(ARGUMENT_DATE_TYPE) as DatePickerDateType }
 
     private val newsViewModel: NewsViewModel by viewModels({ requireParentFragment() })
 
@@ -69,9 +71,11 @@ class DatePickerFragment : MvpAppCompatDialogFragment(), DatePickerView, HasAndr
 
     private fun onPositiveButtonClick() {
         with(binding) {
-            newsViewModel.onChooseDate(
-                LocalDate.of(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth),
-                dateType
+            newsViewModel.onDateChosen(
+                DatePickerDate(
+                    LocalDate.of(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth),
+                    dateType
+                )
             )
         }
     }
