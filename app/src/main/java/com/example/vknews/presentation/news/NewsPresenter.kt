@@ -74,6 +74,8 @@ class NewsPresenter
 
     private fun initLoading() {
         val pagedListConfig = PagedList.Config.Builder()
+            .setInitialLoadSizeHint(10)
+            .setPageSize(10)
             .setEnablePlaceholders(false)
             .build()
         val pagedList = PagedList.Builder(PagedDataSource(), pagedListConfig)
@@ -83,12 +85,12 @@ class NewsPresenter
         viewState.renderList(pagedList)
     }
 
-    private fun loadNews(callbackAction: (list: List<NewsItem>) -> Unit) {
+    private fun loadNews(callbackAction: (list: List<NewsItem>, pageKey: String?) -> Unit) {
         disposeOnDestroy(
             interactor.loadNews()
                 .subscribeBy(
                     onSuccess = {
-                        callbackAction(it.newsInfo.map(NewsInfo::toNewsItem))
+                        callbackAction(it.newsInfo.map(NewsInfo::toNewsItem), it.pageKey)
                     },
                     onError = {
                         logger.logError(it)
@@ -103,14 +105,14 @@ class NewsPresenter
             params: LoadInitialParams<String>,
             callback: LoadInitialCallback<String, NewsItem>
         ) {
-            loadNews { callback.onResult(it, null, null) }
+            loadNews { list, nextPageKey -> callback.onResult(list, null, nextPageKey) }
         }
 
         override fun loadAfter(
             params: LoadParams<String>,
             callback: LoadCallback<String, NewsItem>
         ) {
-            loadNews { callback.onResult(it, null) }
+            loadNews { list, nextPageKey -> callback.onResult(list, nextPageKey) }
         }
 
         override fun loadBefore(

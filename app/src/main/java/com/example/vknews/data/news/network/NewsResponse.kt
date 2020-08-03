@@ -15,7 +15,7 @@ data class NewsResponse(
     val postResponses: List<PostResponse>?,
 
     @Expose
-    @SerializedName(" next_from")
+    @SerializedName("next_from")
     val nextPageKey: String?
 )
 

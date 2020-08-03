@@ -17,9 +17,8 @@ fun <T : MvpPresenter<*>> MvpDelegateHolder.baseMoxyPresenter(
     return MoxyKtxDelegate(mvpDelegate, name, factory)
 }
 
-fun String.toLocalDate(): LocalDate = LocalDate.parse(
-    this, DateTimeFormatter.ofPattern(DATE_FORMAT)
-)
+fun String.toLocalDate(): LocalDate =
+    LocalDate.parse(this, DateTimeFormatter.ofPattern(DATE_FORMAT))
 
 fun LocalDate.toStringFormat(): String = format(DateTimeFormatter.ofPattern(DATE_FORMAT))
 

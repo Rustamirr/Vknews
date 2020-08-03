@@ -1,7 +1,6 @@
 package com.example.vknews.data.news.network
 
 import java.time.LocalDate
-import java.time.ZoneId
 import java.time.ZoneOffset
 import javax.inject.Inject
 
@@ -20,7 +19,7 @@ class NewsNetworkSourceImpl
         token,
         SOURCE_FORMAT.format(sourceId),
         pageKey,
-        startDate.atStartOfDay(ZoneId.systemDefault()).toInstant().epochSecond,
+        startDate.atStartOfDay().toInstant(ZoneOffset.UTC).epochSecond,
         endDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC).epochSecond
     )
 

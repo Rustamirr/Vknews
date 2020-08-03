@@ -28,7 +28,7 @@ private fun PostResponse.toNewsInfo(groupName: String): NewsInfo {
     val attachmentResponse = requireNotNull(attachmentResponses)
         .first { it.type == ATTACHMENT_TYPE_PHOTO || it.type == ATTACHMENT_TYPE_LINK }
 
-    val date = LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault())
+    val date = LocalDateTime.ofInstant(Instant.ofEpochSecond(date), ZoneId.systemDefault())
 
     return when (attachmentResponse.type) {
         ATTACHMENT_TYPE_LINK -> {
