@@ -1,5 +1,6 @@
 package com.example.vknews.data.news
 
+import com.example.vknews.data.NewsRepositoryImpl
 import com.example.vknews.data.news.network.NewsNetworkApi
 import com.example.vknews.data.news.network.NewsNetworkSource
 import com.example.vknews.data.news.network.NewsNetworkSourceImpl

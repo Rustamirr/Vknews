@@ -1,4 +1,4 @@
-package com.example.vknews.data.news
+package com.example.vknews.data
 
 import com.example.vknews.data.authorization.Token
 import com.example.vknews.data.authorization.TokenSource
@@ -12,7 +12,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 private const val TOKEN_REQUIRED_EXCEPTION = "Token required exception"
-private const val GROUP_IZHEVSK_NOT_FOUND_EXCEPTION = "Token required exception"
+private const val GROUP_IZHEVSK_NOT_FOUND_EXCEPTION = "Group Izhevsk not found exception"
 private const val GROUP_NAME = "Ижевск новости"
 
 class NewsRepositoryImpl
@@ -43,7 +43,10 @@ class NewsRepositoryImpl
             requireNotNull(it.value) { TOKEN_REQUIRED_EXCEPTION }
         }
 
-    private fun getGroupIzhevsk(token: String) = networkSource.getGroupByText(token, GROUP_NAME)
+    private fun getGroupIzhevsk(token: String) = networkSource.getGroupByText(
+        token,
+        GROUP_NAME
+    )
         .map {
             requireNotNull(it.groupsResponse.groupResponses?.firstOrNull()) { GROUP_IZHEVSK_NOT_FOUND_EXCEPTION }
         }

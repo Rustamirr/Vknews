@@ -1,10 +1,12 @@
 package com.example.vknews.data.news.network
 
+import io.reactivex.Single
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneOffset
 import javax.inject.Inject
 
-private const val SOURCE_FORMAT = "g%s"
+private const val GROUP_FORMAT = "g%s"
 
 class NewsNetworkSourceImpl
 @Inject constructor(private val api: NewsNetworkApi) : NewsNetworkSource {
@@ -15,14 +17,16 @@ class NewsNetworkSourceImpl
         pageKey: String?,
         startDate: LocalDate,
         endDate: LocalDate
-    ) = api.getNews(
-        token,
-        SOURCE_FORMAT.format(sourceId),
-        pageKey,
-        startDate.atStartOfDay().toInstant(ZoneOffset.UTC).epochSecond,
-        endDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC).epochSecond
-    )
+    ): Single<GetNewsResponse> {
+        val timeZone = ZoneOffset.UTC
+        return api.getNews(
+            token,
+            GROUP_FORMAT.format(sourceId),
+            pageKey,
+            startDate.atStartOfDay().toInstant(timeZone).epochSecond,
+            endDate.atTime(LocalTime.MAX).toInstant(timeZone).epochSecond
+        )
+    }
 
-    override fun getGroupByText(token: String, searchText: String) =
-        api.getGroup(token, searchText)
+    override fun getGroupByText(token: String, searchText: String) = api.getGroup(token, searchText)
 }

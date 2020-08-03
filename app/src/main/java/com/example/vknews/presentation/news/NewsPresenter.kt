@@ -23,6 +23,8 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
+private const val PAGE_SIZE = 10
+
 @InjectViewState
 class NewsPresenter
 @Inject constructor(
@@ -74,8 +76,8 @@ class NewsPresenter
 
     private fun initLoading() {
         val pagedListConfig = PagedList.Config.Builder()
-            .setInitialLoadSizeHint(10)
-            .setPageSize(10)
+            .setInitialLoadSizeHint(PAGE_SIZE)
+            .setPageSize(PAGE_SIZE)
             .setEnablePlaceholders(false)
             .build()
         val pagedList = PagedList.Builder(PagedDataSource(), pagedListConfig)
