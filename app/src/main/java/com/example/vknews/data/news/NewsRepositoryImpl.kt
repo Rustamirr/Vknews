@@ -1,8 +1,7 @@
-package com.example.vknews.data
+package com.example.vknews.data.news
 
 import com.example.vknews.data.authorization.Token
 import com.example.vknews.data.authorization.TokenSource
-import com.example.vknews.data.database.dao.NewsDao
 import com.example.vknews.data.news.network.NewsNetworkSource
 import com.example.vknews.data.news.network.toNewsFeed
 import com.example.vknews.domain.NewsRepository
@@ -19,8 +18,7 @@ private const val GROUP_NAME = "Ижевск новости"
 class NewsRepositoryImpl
 @Inject constructor(
     private val tokenSource: TokenSource,
-    private val networkSource: NewsNetworkSource,
-    private val newsDao: NewsDao
+    private val networkSource: NewsNetworkSource
 ) : NewsRepository {
 
     override fun saveToken(token: Token) = Completable.fromAction { tokenSource.setToken(token) }
@@ -29,25 +27,16 @@ class NewsRepositoryImpl
         pageKey: String?,
         startDate: LocalDate,
         endDate: LocalDate
-    ): Single<NewsFeed> =
-        Single.concat(getNewsFromDb(), getNewsFromNetwork(pageKey, startDate, endDate))
-            .first(NewsFeed(null, emptyList()))
-
-    private fun getNewsFromDb(): Single<NewsFeed> {
-
-    }
-
-    private fun getNewsFromNetwork(pageKey: String?, startDate: LocalDate, endDate: LocalDate) =
-        getToken()
-            .flatMap { token ->
-                getGroupIzhevsk(token)
-                    .map { token to it }
-            }
-            .flatMap { pair ->
-                val (token, groupResponse) = pair
-                networkSource.getNews(token, groupResponse.id, pageKey, startDate, endDate)
-                    .map { it.toNewsFeed(groupResponse) }
-            }
+    ): Single<NewsFeed> = getToken()
+        .flatMap { token ->
+            getGroupIzhevsk(token)
+                .map { token to it }
+        }
+        .flatMap { pair ->
+            val (token, groupResponse) = pair
+            networkSource.getNews(token, groupResponse.id, pageKey, startDate, endDate)
+                .map { it.toNewsFeed(groupResponse) }
+        }
 
     private fun getToken() = Single.fromCallable { tokenSource.getToken() }
         .map {

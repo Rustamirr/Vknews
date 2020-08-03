@@ -1,7 +1,6 @@
 package com.example.vknews.data
 
 import com.example.vknews.data.authorization.AuthorizationDataModule
-import com.example.vknews.data.database.DatabaseModule
 import com.example.vknews.data.news.NewsDataModule
 import dagger.Module
 import dagger.Provides
@@ -17,8 +16,7 @@ private const val BASE_URL = "https://api.vk.com/"
 @Module(
     includes = [
         NewsDataModule::class,
-        AuthorizationDataModule::class,
-        DatabaseModule::class
+        AuthorizationDataModule::class
     ]
 )
 interface AppDataModule {
