@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 data class NewsItem(
     val id: Long,
     val title: String,
+    val description: String,
     val date: LocalDateTime,
     val imageUrl: String?
 ) : Parcelable

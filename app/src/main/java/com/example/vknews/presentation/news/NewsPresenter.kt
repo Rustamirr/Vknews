@@ -69,7 +69,7 @@ class NewsPresenter
     }
 
     fun onNewsItemClick(newsItem: NewsItem) {
-        //router.navigateTo(Screen.NewsDetail(newsItem.id))
+        router.navigateTo(Screen.NewsDetail(newsItem))
     }
 
     private fun initLoading() {
