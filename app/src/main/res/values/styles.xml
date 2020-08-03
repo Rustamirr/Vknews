@@ -16,7 +16,7 @@
     </style>
 
     <style name="RegularText.Text">
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 </resources>
