@@ -67,6 +67,7 @@ ext {
     timberVersion = '4.7.1'
     pagingVersion = '2.1.2'
     vkSdkVersion = '2.1.1'
+    roomVersion = '2.2.5'
 }
 
 dependencies {
@@ -128,4 +129,10 @@ dependencies {
 
     // VK
     implementation "com.vk:androidsdk:$vkSdkVersion"
+
+    // Room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
 }
