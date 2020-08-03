@@ -40,7 +40,9 @@ class MainActivity : MvpAppCompatActivity(), HasAndroidInjector, MainActivityVie
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        VK.login(this, arrayListOf(VKScope.WALL, VKScope.FRIENDS))
+        if (savedInstanceState == null) {
+            VK.login(this, arrayListOf(VKScope.WALL, VKScope.FRIENDS))
+        }
     }
 
     override fun onResumeFragments() {
