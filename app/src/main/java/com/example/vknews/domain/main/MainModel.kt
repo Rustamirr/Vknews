@@ -11,7 +11,5 @@ class MainModel
     private val repository: NewsRepository
 ) : BaseModel<EmptyState>(EmptyState), MainInteractor {
 
-    override fun isAuth() = repository.isAuth()
-
     override fun authorizationPassed(token: Token) = repository.saveToken(token)
 }

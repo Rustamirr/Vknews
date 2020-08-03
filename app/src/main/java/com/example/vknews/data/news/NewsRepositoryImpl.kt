@@ -21,8 +21,6 @@ class NewsRepositoryImpl
     private val networkSource: NewsNetworkSource
 ) : NewsRepository {
 
-    override fun isAuth() = Single.fromCallable { tokenSource.isAuth() }
-
     override fun saveToken(token: Token) = Completable.fromAction { tokenSource.setToken(token) }
 
     override fun loadNews(

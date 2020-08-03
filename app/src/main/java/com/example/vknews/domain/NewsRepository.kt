@@ -8,8 +8,6 @@ import java.time.LocalDate
 
 interface NewsRepository {
 
-    fun isAuth(): Single<Boolean>
-
     fun saveToken(token: Token): Completable
 
     fun loadNews(pageKey: String?, startDate: LocalDate, endDate: LocalDate): Single<NewsFeed>

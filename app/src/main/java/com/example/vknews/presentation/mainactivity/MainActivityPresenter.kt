@@ -23,24 +23,6 @@ class MainActivityPresenter
 
     private val compositeDisposable = CompositeDisposable()
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        compositeDisposable.add(
-            interactor.isAuth()
-                .subscribeOn(schedulers.io())
-                .observeOn(schedulers.main())
-                .subscribeBy(
-                    onSuccess = { isAuth ->
-                        when (isAuth) {
-                            true -> showStartScreen()
-                            else -> viewState.onTokenRequired()
-                        }
-                    },
-                    onError = logger::logError
-                )
-        )
-    }
-
     fun onLogin(token: Token) {
         compositeDisposable.add(
             interactor.authorizationPassed(token)
